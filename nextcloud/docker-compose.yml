@@ -2,7 +2,7 @@ services:
   postgres:
     image: ${POSTGRES_IMAGE_TAG}
     volumes:
-      - nextcloud-postgres:/var/lib/postgresql/data
+      - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -21,7 +21,7 @@ services:
     image: ${REDIS_IMAGE_TAG}
     command: ["redis-server", "--requirepass", "$NEXTCLOUD_REDIS_PASSWORD"]
     volumes:
-      - redis-data:/data
+      - ${REDIS_DATA_LOCATION}:/data
     networks:
       - nextcloud-network
     healthcheck:
@@ -35,7 +35,7 @@ services:
   nextcloud:
     image: ${IMAGE_TAG}
     volumes:
-      - nextcloud-data:${DATA_PATH}
+      - ${DATA_LOCATION}:/var/www/html
     environment:
       TZ: ${TIMEZONE}
       POSTGRES_HOST: postgres
@@ -111,14 +111,9 @@ services:
     image: ${IMAGE_TAG}
     entrypoint: /cron.sh
     volumes:
-      - nextcloud-data:${DATA_PATH}
+      - ${DATA_LOCATION}:/var/www/html
     networks:
       - nextcloud-network
-
-volumes:
-  nextcloud-data:
-  redis-data:
-  nextcloud-postgres:
 
 networks:
   nextcloud-network:

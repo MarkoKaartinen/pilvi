@@ -38,7 +38,7 @@ services:
       - "--global.sendanonymoususage=false"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - traefik-certificates:/etc/traefik/acme
+      - ./certificates:/etc/traefik/acme
     networks:
       - traefik-network
     ports:
@@ -72,9 +72,6 @@ services:
       - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
     restart: unless-stopped
-
-volumes:
-  traefik-certificates:
 
 networks:
   traefik-network:
