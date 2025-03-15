@@ -22,8 +22,36 @@ Osoite: `kuvat.domain.tld`
 ### Nextcloud 
 
 Tiedostoja varten Nextcloud kontti.  
-Osoite: `domain.tld`
+Osoite: `tiedostot.domain.tld`
 
-### Nginx
+### Traefik
 
-Sitten nginx kontti, jolla saadaan ns. reverse proxy ja oma domain sekä ssl
+Traefik hoitaa reverse proxyn ja SSL sertifikaatit.
+
+## Asennus
+
+Asenna docker ja docker compose palvelimelle.
+
+Luo seuraavat docker verkot:
+
+```
+docker network create traefik-network
+
+docker network create nextcloud-network
+
+docker network create immich-network
+```
+
+Kloonaa repo palvelimelle.  
+
+Määritä .env tiedostot
+
+Aja kontit ylös komennolla:
+
+```docker compose up -d```
+
+## Linkkejä
+
+- https://github.com/heyvaldemar/nextcloud-traefik-letsencrypt-docker-compose
+- https://immich.app/docs/install/docker-compose
+- https://immich.app/docs/administration/reverse-proxy/
