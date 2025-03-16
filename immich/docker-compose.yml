@@ -17,17 +17,17 @@ services:
       - "traefik.enable=true"
       # A router to expose the Traefik dashboard
       - "traefik.http.routers.immich.rule=Host(`${HOSTNAME}`)"
-      - # Assign the router to a named Immich service
+      # Assign the router to a named Immich service
       - "traefik.http.routers.immich.service=immich"
-      - # Use the 'websecure' (HTTPS) entry point
+      # Use the 'websecure' (HTTPS) entry point
       - "traefik.http.routers.immich.entrypoints=websecure"
-      - # Define the internal container port for routing
+      # Define the internal container port for routing
       - "traefik.http.services.immich.loadbalancer.server.port=2283"
-      - # Enable TLS on this router
+      # Enable TLS on this router
       - "traefik.http.routers.immich.tls=true"
-      - # Use Let's Encrypt for certificate management
+      # Use Let's Encrypt for certificate management
       - "traefik.http.routers.immich.tls.certresolver=letsencrypt"
-      - # Pass the original Host header to the container
+      # Pass the original Host header to the container
       - "traefik.http.services.immich.loadbalancer.passhostheader=true"
       - "traefik.docker.network=traefik-network"
     ports:
