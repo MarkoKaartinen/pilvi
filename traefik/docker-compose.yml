@@ -23,7 +23,8 @@ services:
       # with "traefik.enable=true"
       - "--providers.docker.exposedbydefault=false"
       # Use ACME (Let's Encrypt) to generate/renew certificates via TLS challenge
-      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      # - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
       # The email address used by Let's Encrypt for renewal notices
       - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}"
       # The file where ACME certificates are stored inside the container
