@@ -1,0 +1,43 @@
+services:
+  glance:
+    container_name: glance
+    image: glanceapp/glance
+    networks:
+      - glance-network
+      - traefik-network
+    volumes:
+      - ./config:/app/config
+      - ./assets:/app/assets
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - 8083:8080
+    env_file: .env
+    labels:
+      # Enable Traefik for this container.
+      - "traefik.enable=true"
+      # A router to expose the Traefik dashboard
+      - "traefik.http.routers.glance.rule=Host(`${HOSTNAME}`)"
+      # Assign the router to a named Immich service
+      - "traefik.http.routers.glance.service=glance"
+      # Use the 'websecure' (HTTPS) entry point
+      - "traefik.http.routers.glance.entrypoints=websecure"
+      # Define the internal container port for routing
+      - "traefik.http.services.glance.loadbalancer.server.port=8083"
+      # Enable TLS on this router
+      - "traefik.http.routers.glance.tls=true"
+      # Use Let's Encrypt for certificate management
+      - "traefik.http.routers.glance.tls.certresolver=letsencrypt"
+      # Pass the original Host header to the container
+      - "traefik.http.services.glance.loadbalancer.passhostheader=true"
+      # HTTP -> HTTPS redirect middleware
+      - "traefik.http.routers.glance-http.rule=Host(`${HOSTNAME}`)"
+      - "traefik.http.routers.glance-http.entrypoints=web"
+      - "traefik.http.routers.glance-http.middlewares=redirect-to-https"
+      # Traefik network
+      - "traefik.docker.network=traefik-network"
+
+networks:
+  glance-network:
+    external: true
+  traefik-network:
+    external: true

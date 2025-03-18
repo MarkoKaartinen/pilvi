@@ -40,6 +40,8 @@ docker network create traefik-network
 docker network create nextcloud-network
 
 docker network create immich-network
+
+docker network create glance-network
 ```
 
 Kloonaa repo palvelimelle.  

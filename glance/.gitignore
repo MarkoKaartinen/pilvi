@@ -1,0 +1,5 @@
+assets/*
+config/*
+!config/glance-example.yml
+!config/koti-example.yml
+!assets/user-example.css
