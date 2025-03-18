@@ -42,6 +42,7 @@ services:
     image: ${IMAGE_TAG}
     volumes:
       - ${DATA_LOCATION}:/var/www/html
+      - ${UPLOADED_DATA_LOCATION}:/var/www/html/data
     environment:
       TZ: ${TIMEZONE}
       POSTGRES_HOST: postgres
@@ -127,6 +128,7 @@ services:
       - "glance.name=Cron"
     volumes:
       - ${DATA_LOCATION}:/var/www/html
+      - ${UPLOADED_DATA_LOCATION}:/var/www/html/data
     networks:
       - nextcloud-network
 
