@@ -28,6 +28,10 @@ Osoite: `tiedostot.domain.tld`
 
 Traefik hoitaa reverse proxyn ja SSL sertifikaatit.
 
+### Glance
+
+Etusivu koko "pilvelle".
+
 ## Asennus
 
 Asenna docker ja docker compose palvelimelle.
