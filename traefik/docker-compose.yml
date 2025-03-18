@@ -68,9 +68,12 @@ services:
       # Pass the original Host header to the backend
       - "traefik.http.services.dashboard.loadbalancer.passhostheader=true"
       # HTTP -> HTTPS redirect middleware
+      - "traefik.http.routers.dashboard-http.rule=Host(`${HOSTNAME}`)"
+      - "traefik.http.routers.dashboard-http.entrypoints=web"
+      - "traefik.http.routers.dashboard-http.middlewares=redirect-to-https"
+      # HTTP -> HTTPS redirect middleware
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
-      - "traefik.http.routers.dashboard.middlewares=redirect-to-https"
     restart: unless-stopped
 
 networks:

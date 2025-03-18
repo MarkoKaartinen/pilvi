@@ -95,6 +95,10 @@ services:
       - "traefik.http.middlewares.nextcloud-securityheaders.headers.stsSeconds=15552000"
       - "traefik.http.middlewares.nextcloud-securityheaders.headers.stsIncludeSubdomains=true"
       - "traefik.http.middlewares.nextcloud-securityheaders.headers.stsPreload=true"
+      # HTTP -> HTTPS redirect middleware
+      - "traefik.http.routers.nextcloud-http.rule=Host(`${HOSTNAME}`)"
+      - "traefik.http.routers.nextcloud-http.entrypoints=web"
+      - "traefik.http.routers.nextcloud-http.middlewares=redirect-to-https"
       # Specify which Docker network Traefik should use for routing
       - "traefik.docker.network=traefik-network"
 
