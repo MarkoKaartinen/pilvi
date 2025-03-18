@@ -25,27 +25,27 @@ services:
       - "glance.icon=di:hoarder"
       - "glance.url=https://${HOSTNAME}"
       - "glance.id=hoarder"
-      - # Enable Traefik for this container.
+      # Enable Traefik for this container.
       - "traefik.enable=true"
-      - # A router to expose the Traefik dashboard
+      # A router to expose the Traefik dashboard
       - "traefik.http.routers.hoarder.rule=Host(`${HOSTNAME}`)"
-      - # Assign the router to a named Hoarder service
+      # Assign the router to a named Hoarder service
       - "traefik.http.routers.hoarder.service=hoarder"
-      - # Use the 'websecure' (HTTPS) entry point
+      # Use the 'websecure' (HTTPS) entry point
       - "traefik.http.routers.hoarder.entrypoints=websecure"
-      - # Define the internal container port for routing
+      # Define the internal container port for routing
       - "traefik.http.services.hoarder.loadbalancer.server.port=3000"
-      - # Enable TLS on this router
+      # Enable TLS on this router
       - "traefik.http.routers.hoarder.tls=true"
-      - # Use Let's Encrypt for certificate management
+      # Use Let's Encrypt for certificate management
       - "traefik.http.routers.hoarder.tls.certresolver=letsencrypt"
-      - # Pass the original Host header to the container
+      # Pass the original Host header to the container
       - "traefik.http.services.hoarder.loadbalancer.passhostheader=true"
-      - # HTTP -> HTTPS redirect middleware
+      # HTTP -> HTTPS redirect middleware
       - "traefik.http.routers.hoarder-http.rule=Host(`${HOSTNAME}`)"
       - "traefik.http.routers.hoarder-http.entrypoints=web"
       - "traefik.http.routers.hoarder-http.middlewares=redirect-to-https"
-      - # Traefik network
+      # Traefik network
       - "traefik.docker.network=traefik-network"
   chrome:
     image: gcr.io/zenika-hub/alpine-chrome:123
