@@ -1,0 +1,84 @@
+version: "3.8"
+services:
+  web:
+    image: ghcr.io/hoarder-app/hoarder:${HOARDER_VERSION:-release}
+    restart: unless-stopped
+    networks:
+      - immich-network
+      - traefik-network
+    volumes:
+      - ./data:/data
+    ports:
+      - '3030:3000'
+    env_file:
+      - .env
+    environment:
+      MEILI_ADDR: http://meilisearch:7700
+      BROWSER_WEB_URL: http://chrome:9222
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+
+      # You almost never want to change the value of the DATA_DIR variable.
+      # If you want to mount a custom directory, change the volume mapping above instead.
+      DATA_DIR: /data # DON'T CHANGE THIS
+    labels:
+      - "glance.name=Linkit"
+      - "glance.icon=di:hoarder"
+      - "glance.url=https://${HOSTNAME}"
+      - "glance.id=hoarder"
+      - # Enable Traefik for this container.
+      - "traefik.enable=true"
+      - # A router to expose the Traefik dashboard
+      - "traefik.http.routers.hoarder.rule=Host(`${HOSTNAME}`)"
+      - # Assign the router to a named Hoarder service
+      - "traefik.http.routers.hoarder.service=hoarder"
+      - # Use the 'websecure' (HTTPS) entry point
+      - "traefik.http.routers.hoarder.entrypoints=websecure"
+      - # Define the internal container port for routing
+      - "traefik.http.services.hoarder.loadbalancer.server.port=3000"
+      - # Enable TLS on this router
+      - "traefik.http.routers.hoarder.tls=true"
+      - # Use Let's Encrypt for certificate management
+      - "traefik.http.routers.hoarder.tls.certresolver=letsencrypt"
+      - # Pass the original Host header to the container
+      - "traefik.http.services.hoarder.loadbalancer.passhostheader=true"
+      - # HTTP -> HTTPS redirect middleware
+      - "traefik.http.routers.hoarder-http.rule=Host(`${HOSTNAME}`)"
+      - "traefik.http.routers.hoarder-http.entrypoints=web"
+      - "traefik.http.routers.hoarder-http.middlewares=redirect-to-https"
+      - # Traefik network
+      - "traefik.docker.network=traefik-network"
+  chrome:
+    image: gcr.io/zenika-hub/alpine-chrome:123
+    restart: unless-stopped
+    labels:
+      - "glance.parent=hoarder"
+      - "glance.name=Chrome"
+    networks:
+      - immich-network
+    command:
+      - --no-sandbox
+      - --disable-gpu
+      - --disable-dev-shm-usage
+      - --remote-debugging-address=0.0.0.0
+      - --remote-debugging-port=9222
+      - --hide-scrollbars
+  meilisearch:
+    image: getmeili/meilisearch:v1.11.1
+    restart: unless-stopped
+    labels:
+      - "glance.parent=hoarder"
+      - "glance.name=Meilisearch"
+    networks:
+      - immich-network
+    env_file:
+      - .env
+    environment:
+      MEILI_NO_ANALYTICS: "true"
+    volumes:
+      - ./meilisearch:/meili_data
+
+networks:
+  hoarder-network:
+    external: true
+  traefik-network:
+    external: true
