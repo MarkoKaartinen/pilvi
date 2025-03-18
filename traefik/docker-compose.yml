@@ -57,7 +57,7 @@ services:
       start_period: 5s
     labels:
       - "glance.name=Traefik"
-      - "glance.icon=di:treafik-proxy"
+      - "glance.icon=di:treafik"
       - "glance.url=https://${HOSTNAME}"
       - "glance.id=traefik"
       # Enable Traefik for this container.
