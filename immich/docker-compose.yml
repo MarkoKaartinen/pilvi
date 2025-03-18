@@ -30,7 +30,9 @@ services:
       # Pass the original Host header to the container
       - "traefik.http.services.immich.loadbalancer.passhostheader=true"
       # HTTP -> HTTPS redirect middleware
-      - "traefik.http.routers.immich.middlewares=redirect-to-https"
+      - "traefik.http.routers.immich-http.rule=Host(`${HOSTNAME}`)"
+      - "traefik.http.routers.immich-http.entrypoints=web"
+      - "traefik.http.routers.immich-http.middlewares=redirect-to-https"
       # Traefik network
       - "traefik.docker.network=traefik-network"
     ports:
