@@ -16,6 +16,9 @@ services:
       retries: 3
       start_period: 60s
     restart: unless-stopped
+    labels:
+      - "glance.parent=nextcloud"
+      - "glance.name=Database"
 
   redis:
     image: ${REDIS_IMAGE_TAG}
@@ -31,6 +34,9 @@ services:
       retries: 3
       start_period: 60s
     restart: unless-stopped
+    labels:
+      - "glance.parent=nextcloud"
+      - "glance.name=Redis"
 
   nextcloud:
     image: ${IMAGE_TAG}
@@ -63,6 +69,10 @@ services:
       retries: 3
       start_period: 90s
     labels:
+      - "glance.name=Tiedostot"
+      - "glance.icon=di:nextcloud"
+      - "glance.url=https://${HOSTNAME}"
+      - "glance.id=nextcloud"
       # Enable Traefik for this container
       - "traefik.enable=true"
       # Match incoming requests on the specific hostname for Nextcloud
@@ -112,6 +122,9 @@ services:
   nextcloud-cron:
     image: ${IMAGE_TAG}
     entrypoint: /cron.sh
+    labels:
+      - "glance.parent=nextcloud"
+      - "glance.name=Cron"
     volumes:
       - ${DATA_LOCATION}:/var/www/html
     networks:

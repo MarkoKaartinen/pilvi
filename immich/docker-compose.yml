@@ -13,6 +13,10 @@ services:
     env_file:
       - .env
     labels:
+      - "glance.name=Kuvat"
+      - "glance.icon=di:immich"
+      - "glance.url=https://${HOSTNAME}"
+      - "glance.id=immich"
       # Enable Traefik for this container.
       - "traefik.enable=true"
       # A router to expose the Traefik dashboard
@@ -54,6 +58,9 @@ services:
     env_file:
       - .env
     restart: always
+    labels:
+      - "glance.parent=immich"
+      - "glance.name=Machine learning"
     healthcheck:
       disable: false
 
@@ -67,6 +74,9 @@ services:
     healthcheck:
       test: redis-cli ping || exit 1
     restart: always
+    labels:
+      - "glance.parent=immich"
+      - "glance.name=Redis"
 
   database:
     container_name: immich_postgres
@@ -99,6 +109,9 @@ services:
       -c shared_buffers=512MB
       -c wal_compression=on
     restart: always
+    labels:
+      - "glance.parent=immich"
+      - "glance.name=Database"
 
 networks:
   immich-network:
