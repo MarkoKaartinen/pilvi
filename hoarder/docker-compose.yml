@@ -1,10 +1,9 @@
-version: "3.8"
 services:
   web:
     image: ghcr.io/hoarder-app/hoarder:${HOARDER_VERSION:-release}
     restart: unless-stopped
     networks:
-      - immich-network
+      - hoarder-network
       - traefik-network
     volumes:
       - ./data:/data
@@ -54,7 +53,7 @@ services:
       - "glance.parent=hoarder"
       - "glance.name=Chrome"
     networks:
-      - immich-network
+      - hoarder-network
     command:
       - --no-sandbox
       - --disable-gpu
@@ -69,7 +68,7 @@ services:
       - "glance.parent=hoarder"
       - "glance.name=Meilisearch"
     networks:
-      - immich-network
+      - hoarder-network
     env_file:
       - .env
     environment:
