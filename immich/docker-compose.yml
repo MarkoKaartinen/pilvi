@@ -50,7 +50,7 @@ services:
     networks:
       - immich-network
     volumes:
-      - model-cache:/cache
+      - ${CACHE_LOCATION}:/cache
     env_file:
       - .env
     restart: always
@@ -60,6 +60,8 @@ services:
   redis:
     container_name: immich_redis
     image: docker.io/redis:6.2-alpine@sha256:148bb5411c184abd288d9aaed139c98123eeb8824c5d3fce03cf721db58066d8
+    volumes:
+      - ${REDIS_DATA_LOCATION}:/data
     networks:
       - immich-network
     healthcheck:
@@ -97,9 +99,6 @@ services:
       -c shared_buffers=512MB
       -c wal_compression=on
     restart: always
-
-volumes:
-  model-cache:
 
 networks:
   immich-network:
