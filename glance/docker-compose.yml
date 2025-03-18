@@ -14,8 +14,7 @@ services:
     env_file: .env
     labels:
       - "glance.name=Glance"
-      - "glance.icon=di:glance"
-      - "glance.url=https://${HOSTNAME}"
+      - "glance.hide=true"
       - "glance.id=glance"
       # Enable Traefik for this container.
       - "traefik.enable=true"
