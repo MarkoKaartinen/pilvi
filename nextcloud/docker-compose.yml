@@ -42,7 +42,7 @@ services:
     image: ${IMAGE_TAG}
     volumes:
       - ${DATA_LOCATION}:/var/www/html
-      - ${UPLOADED_DATA_LOCATION}:/var/www/html/uploads
+      - ${UPLOADED_DATA_LOCATION}:/var/www/html/data
     environment:
       TZ: ${TIMEZONE}
       POSTGRES_HOST: postgres
@@ -56,7 +56,6 @@ services:
       NEXTCLOUD_ADMIN_USER: ${ADMIN_USERNAME}
       NEXTCLOUD_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       NEXTCLOUD_TRUSTED_DOMAINS: ${HOSTNAME}
-      NEXTCLOUD_DATA_DIR: /var/www/html/uploads
       OVERWRITECLIURL: ${URL}
       OVERWRITEPROTOCOL: https
       OVERWRITEHOST: ${HOSTNAME}
@@ -129,6 +128,7 @@ services:
       - "glance.name=Cron"
     volumes:
       - ${DATA_LOCATION}:/var/www/html
+      - ${UPLOADED_DATA_LOCATION}:/var/www/html/data
     networks:
       - nextcloud-network
 
