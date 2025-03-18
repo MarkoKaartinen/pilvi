@@ -22,7 +22,7 @@ services:
       # Use the 'websecure' (HTTPS) entry point
       - "traefik.http.routers.glance.entrypoints=websecure"
       # Define the internal container port for routing
-      - "traefik.http.services.glance.loadbalancer.server.port=8083"
+      - "traefik.http.services.glance.loadbalancer.server.port=8080"
       # Enable TLS on this router
       - "traefik.http.routers.glance.tls=true"
       # Use Let's Encrypt for certificate management
