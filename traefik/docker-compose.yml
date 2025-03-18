@@ -38,9 +38,9 @@ services:
       # Disable sending anonymous usage data to the Traefik maintainers
       - "--global.sendanonymoususage=false"
       # Immich requires higher timeouts for uploads
-      - "--entrypoints.websecure.timeouts.readTimeout=600"
-      - "--entrypoints.websecure.timeouts.idleTimeout=600"
-      - "--entrypoints.websecure.timeouts.writeTimeout=600"
+      - "--entryPoints.websecure.transport.respondingTimeouts.readTimeout=600s"
+      - "--entryPoints.websecure.transport.respondingTimeouts.idleTimeout=600s"
+      - "--entryPoints.websecure.transport.respondingTimeouts.writeTimeout=600s"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./certificates:/etc/traefik/acme
