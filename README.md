@@ -28,10 +28,6 @@ Osoite: `tiedostot.domain.tld`
 
 Traefik hoitaa reverse proxyn ja SSL sertifikaatit.
 
-### Hoarder
-
-Kirjanmerkit.
-
 ### Glance
 
 Etusivu koko "pilvelle".
@@ -50,8 +46,6 @@ docker network create nextcloud-network
 docker network create immich-network
 
 docker network create glance-network
-
-docker network create hoarder-network
 ```
 
 Kloonaa repo palvelimelle.  
