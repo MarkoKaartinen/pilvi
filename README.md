@@ -26,11 +26,18 @@ Osoite: `tiedostot.domain.tld`
 
 ### Traefik
 
-Traefik hoitaa reverse proxyn ja SSL sertifikaatit.
+Traefik hoitaa reverse proxyn ja SSL sertifikaatit.  
+Osoite: `traefik.domain.tld`
+
+### Calibre web
+
+Kirjoille oma paikka.  
+Osoite: `kirjat.domain.tld`
 
 ### Glance
 
-Etusivu koko "pilvelle".
+Etusivu koko "pilvelle".  
+Osoite: `domain.tld`
 
 ## Asennus
 
@@ -46,6 +53,8 @@ docker network create nextcloud-network
 docker network create immich-network
 
 docker network create glance-network
+
+docker network create calibre-network
 ```
 
 Kloonaa repo palvelimelle.  
@@ -61,3 +70,4 @@ Aja kontit ylös komennolla:
 - https://github.com/heyvaldemar/nextcloud-traefik-letsencrypt-docker-compose
 - https://immich.app/docs/install/docker-compose
 - https://immich.app/docs/administration/reverse-proxy/
+- https://github.com/crocodilestick/Calibre-Web-Automated

@@ -1,0 +1,49 @@
+services:
+  calibre-web-automated:
+    image: crocodilestick/calibre-web-automated:latest
+    container_name: calibre-web-automated
+    networks:
+      - calibre-network
+      - traefik-network
+    environment:
+      - TZ=Europe/Helsinki
+    volumes:
+      - ${CONFIG_LOCATION}:/config
+      - ${INGEST_LOCATION}:/cwa-book-ingest
+      - ${LIBRARY_LOCATION}:/calibre-library
+    ports:
+      - '8084:8083'
+    restart: unless-stopped
+    labels:
+      - "glance.name=Kirjat"
+      - "glance.icon=di:calibre-web"
+      - "glance.url=https://${HOSTNAME}"
+      - "glance.id=calibre"
+      # Enable Traefik for this container.
+      - "traefik.enable=true"
+      # A router to expose the Traefik dashboard
+      - "traefik.http.routers.calibre.rule=Host(`${HOSTNAME}`)"
+      # Assign the router to a named calibre service
+      - "traefik.http.routers.calibre.service=calibre"
+      # Use the 'websecure' (HTTPS) entry point
+      - "traefik.http.routers.calibre.entrypoints=websecure"
+      # Define the internal container port for routing
+      - "traefik.http.services.calibre.loadbalancer.server.port=8083"
+      # Enable TLS on this router
+      - "traefik.http.routers.calibre.tls=true"
+      # Use Let's Encrypt for certificate management
+      - "traefik.http.routers.calibre.tls.certresolver=letsencrypt"
+      # Pass the original Host header to the container
+      - "traefik.http.services.calibre.loadbalancer.passhostheader=true"
+      # HTTP -> HTTPS redirect middleware
+      - "traefik.http.routers.calibre-http.rule=Host(`${HOSTNAME}`)"
+      - "traefik.http.routers.calibre-http.entrypoints=web"
+      - "traefik.http.routers.calibre-http.middlewares=redirect-to-https"
+      # Traefik network
+      - "traefik.docker.network=traefik-network"
+
+networks:
+  calibre-network:
+    external: true
+  traefik-network:
+    external: true
