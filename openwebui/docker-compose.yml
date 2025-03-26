@@ -1,0 +1,45 @@
+services:
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: openwebui
+    networks:
+      - openwebui-network
+      - traefik-network
+    ports:
+      - "3000:8080"
+    volumes:
+      - ${DATA_LOCATION}:/app/backend/data
+    restart: unless-stopped
+    labels:
+      - "glance.name=Open WebUI"
+      - "glance.icon=di:open-webui"
+      - "glance.url=https://${HOSTNAME}"
+      - "glance.id=openwebui"
+      # Enable Traefik for this container.
+      - "traefik.enable=true"
+      # A router to expose the Traefik dashboard
+      - "traefik.http.routers.openwebui.rule=Host(`${HOSTNAME}`)"
+      # Assign the router to a named calibre service
+      - "traefik.http.routers.openwebui.service=openwebui"
+      # Use the 'websecure' (HTTPS) entry point
+      - "traefik.http.routers.openwebui.entrypoints=websecure"
+      # Define the internal container port for routing
+      - "traefik.http.services.openwebui.loadbalancer.server.port=8080"
+      # Enable TLS on this router
+      - "traefik.http.routers.openwebui.tls=true"
+      # Use Let's Encrypt for certificate management
+      - "traefik.http.routers.openwebui.tls.certresolver=letsencrypt"
+      # Pass the original Host header to the container
+      - "traefik.http.services.openwebui.loadbalancer.passhostheader=true"
+      # HTTP -> HTTPS redirect middleware
+      - "traefik.http.routers.openwebui-http.rule=Host(`${HOSTNAME}`)"
+      - "traefik.http.routers.openwebui-http.entrypoints=web"
+      - "traefik.http.routers.openwebui-http.middlewares=redirect-to-https"
+      # Traefik network
+      - "traefik.docker.network=traefik-network"
+
+networks:
+  openwebui-network:
+    external: true
+  traefik-network:
+    external: true

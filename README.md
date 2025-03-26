@@ -34,6 +34,11 @@ Osoite: `traefik.domain.tld`
 Kirjoille oma paikka.  
 Osoite: `kirjat.domain.tld`
 
+### Open WebUI
+
+Open WebUI AI platform
+Osoite: `ai.domain.tld`
+
 ### Glance
 
 Etusivu koko "pilvelle".  
@@ -55,6 +60,8 @@ docker network create immich-network
 docker network create glance-network
 
 docker network create calibre-network
+
+docker network create openwebui-network
 ```
 
 Kloonaa repo palvelimelle.  
